@@ -1,5 +1,10 @@
+import os
+
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_community.chat_models.tongyi import ChatTongyi
+from langchain_deepseek import ChatDeepSeek
+
+# 当前环境只配置了 OpenAI 的 key，这里直接复用它作为 DeepSeek 的 Key
+os.environ["DEEPSEEK_API_KEY"] = os.environ["OPENAI_API_KEY"]
 
 chat_prompt_template = ChatPromptTemplate.from_messages(
     [
@@ -19,9 +24,8 @@ history_data = [
 # StringPromptValue    to_string()
 prompt_text = chat_prompt_template.invoke({"history": history_data}).to_string()
 
-model = ChatTongyi(model="qwen3-max")
+model = ChatDeepSeek(model="deepseek-flash")
 
 res = model.invoke(prompt_text)
 
 print(res.content, type(res))
-

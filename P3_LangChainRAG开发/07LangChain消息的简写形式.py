@@ -1,7 +1,12 @@
-from langchain_community.chat_models.tongyi import ChatTongyi
+import os
 
-# 得到模型对象, qwen3-max就是聊天模型
-model = ChatTongyi(model="qwen3-max")
+from langchain_deepseek import ChatDeepSeek
+
+# 当前环境只配置了 OPENAI_API_KEY，这里直接复用它作为 DeepSeek 的 Key
+os.environ["DEEPSEEK_API_KEY"] = os.environ["OPENAI_API_KEY"]
+
+# 得到模型对象, deepseek-flash就是聊天模型
+model = ChatDeepSeek(model="deepseek-flash")
 
 # 准备消息列表
 messages = [
