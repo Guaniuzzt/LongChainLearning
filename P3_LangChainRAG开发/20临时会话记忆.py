@@ -1,10 +1,16 @@
-from langchain_community.chat_models.tongyi import ChatTongyi
+import os
+
+from langchain_deepseek import ChatDeepSeek
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.runnables import RunnableConfig
 from langchain_core.chat_history import InMemoryChatMessageHistory
 
-model = ChatTongyi(model="qwen3-max")
+# 当前环境只配置了 OpenAI 的 key，这里直接复用它作为 DeepSeek 的 Key
+os.environ["DEEPSEEK_API_KEY"] = os.environ["OPENAI_API_KEY"]
+
+model = ChatDeepSeek(model="deepseek-flash")
 # prompt = PromptTemplate.from_template(
 #     "你需要根据会话历史回应用户问题。对话历史：{chat_history}，用户提问：{input}，请回答"
 # )
@@ -45,8 +51,8 @@ conversation_chain = RunnableWithMessageHistory(
 
 
 if __name__ == '__main__':
-    # 固定格式，添加LangChain的配置，为当前程序配置所属的session_id
-    session_config = {
+    # 固定格式，添加LangChain的配置，为当前程序所属的session_id
+    session_config: RunnableConfig = {
         "configurable": {
             "session_id": "user_001"
         }
