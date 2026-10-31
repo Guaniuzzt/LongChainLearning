@@ -1,13 +1,18 @@
+import os
+
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
-from langchain_community.chat_models.tongyi import ChatTongyi
+from langchain_deepseek import ChatDeepSeek
 from langchain_core.prompts import PromptTemplate
+
+# 当前环境只配置了 OpenAI 的 key，这里直接复用它作为 DeepSeek 的 Key
+os.environ["DEEPSEEK_API_KEY"] = os.environ["OPENAI_API_KEY"]
 
 # 创建所需的解析器
 str_parser = StrOutputParser()
 json_parser = JsonOutputParser()
 
 # 模型创建
-model = ChatTongyi(model="qwen3-max")
+model = ChatDeepSeek(model="deepseek-flash")
 
 # 第一个提示词模板
 first_prompt = PromptTemplate.from_template(
@@ -25,4 +30,3 @@ chain = first_prompt | model | json_parser | second_prompt | model | str_parser
 
 for chunk in chain.stream({"lastname": "张", "gender": "女儿"}):
     print(chunk, end="", flush=True)
-

@@ -1,8 +1,13 @@
+import os
+
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_community.chat_models.tongyi import ChatTongyi
+from langchain_deepseek import ChatDeepSeek
 
-model = ChatTongyi(model="qwen3-max")
+# 当前环境只配置了 OpenAI 的 key，这里直接复用它作为 DeepSeek 的 Key
+os.environ["DEEPSEEK_API_KEY"] = os.environ["OPENAI_API_KEY"]
+
+model = ChatDeepSeek(model="deepseek-flash")
 str_parser = StrOutputParser()
 
 first_prompt = PromptTemplate.from_template(
